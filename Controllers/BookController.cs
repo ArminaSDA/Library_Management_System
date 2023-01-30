@@ -4,19 +4,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Library_Management_System.Controllers
 {
-    public class AuthorController : Controller
+    public class BookController : Controller
     {
         private readonly LibraryDbContext _context;
 
-        public AuthorController(LibraryDbContext context)
+        public BookController(LibraryDbContext context)
         {
             _context = context;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Author> authorList = _context.Authors;
-            return View(authorList);
+            IEnumerable<Book> bookList = _context.Books;
+            return View(bookList);
         }
 
         public IActionResult Create()
@@ -27,18 +27,16 @@ namespace Library_Management_System.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public IActionResult Create(Author authobj)
+        public IActionResult Create(Book bookobj)
         {
             if (ModelState.IsValid)
             {
-
-                object value = _context.Authors.Add(authobj);
+                object value = _context.Books.Add(bookobj);
                 _context.SaveChanges();
-                TempData["ResultOk"] = "Author Added Successfully!";
+                TempData["ResultOk"] = "Book Added Successfully!";
             }
-            return View(authobj);
+            return View(bookobj);
         }
-
 
         public IActionResult Edit(int? id)
         {
@@ -46,25 +44,25 @@ namespace Library_Management_System.Controllers
             {
                 return NotFound();
             }
-            var afromdb = _context.Authors.Find(id);
+            var bookfromdb = _context.Books.Find(id);
 
-            if (afromdb == null)
+            if (bookfromdb == null)
             {
                 return NotFound();
             }
-            return View(afromdb);
+            return View(bookfromdb);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Author authobj)
+        public IActionResult Edit(Book bookobj)
         {
             if (ModelState.IsValid)
-            { _context.Authors.Update(authobj); }
+            { _context.Books.Update(bookobj); }
             _context.SaveChanges();
             TempData["ResultOk"] = "Data Updated Successfully!";
             return RedirectToAction("Index");
-            return View(authobj);
+            return View(bookobj);
         }
         public IActionResult Delete(int? id)
         {
@@ -72,30 +70,28 @@ namespace Library_Management_System.Controllers
             {
                 return NotFound();
             }
-            var afromdb = _context.Authors.Find(id);
+            var bookfromdb = _context.Books.Find(id);
 
-            if (afromdb == null)
+            if (bookfromdb == null)
             {
                 return NotFound();
             }
-            return View(afromdb);
+            return View(bookfromdb);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteAuthor(int? id)
+        public IActionResult DeleteBook(int? id)
         {
-            var deleterecord = _context.Authors.Find(id);
+            var deleterecord = _context.Books.Find(id);
             if (deleterecord == null)
             {
                 return NotFound();
             }
-            _context.Authors.Remove(deleterecord);
+            _context.Books.Remove(deleterecord);
             _context.SaveChanges();
             TempData["ResultOk"] = "Data Deleted Successfully !";
             return RedirectToAction("Index");
         }
-
     }
 }
-
